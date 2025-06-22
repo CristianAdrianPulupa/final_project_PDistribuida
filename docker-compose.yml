@@ -144,6 +144,15 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
 
+  user-status-service:
+      build: ./backend/user-domain/user-status-service
+      ports:
+        - "3008:3008"
+      env_file:
+        - ./backend/user-domain/user-status-service/.env
+      depends_on:
+        - mongo
+
 volumes:
   mongo-data:
   mysql-data:

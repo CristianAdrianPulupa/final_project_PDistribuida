@@ -24,7 +24,7 @@ const register = async (req, res) => {
 
     await user.save();
 
-    // Crear perfil en profile-service (⚠️ usamos el nombre del contenedor)
+    // Crear perfil
     try {
       await axios.post('http://profile-service:3006/api/profile', {
         userId: user._id.toString(),
@@ -64,6 +64,16 @@ const login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: '2h' }
     );
+
+    // ✅ ACTUALIZAR ESTADO A "activo" EN user-status-service
+    try {
+      await axios.post('http://user-status-service:3008/api/status', {
+        userId: user._id.toString(),
+        status: "activo"
+      });
+    } catch (statusErr) {
+      console.error('⚠️ Error al actualizar estado del usuario:', statusErr.message);
+    }
 
     res.status(200).json({ message: 'Inicio de sesión exitoso', token });
   } catch (err) {

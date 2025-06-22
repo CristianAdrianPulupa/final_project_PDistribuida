@@ -3,7 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 const SettingsPage = () => {
-  const [settings, setSettings] = useState({ theme: "light", language: "es" });
+  const [settings, setSettings] = useState({
+    theme: "light",
+    language: "es",
+    status: "" // se sigue usando, pero no se muestra
+  });
   const [userId, setUserId] = useState("");
   const navigate = useNavigate();
 
@@ -15,12 +19,21 @@ const SettingsPage = () => {
         const uid = decoded.id || decoded.userId;
         setUserId(uid);
 
+        // Obtener tema
         fetch(`http://localhost:3007/api/settings/${uid}`)
           .then((res) => res.json())
           .then((data) => {
-            setSettings(data);
+            setSettings((prev) => ({ ...prev, theme: data.theme }));
             document.body.classList.toggle("dark-theme", data.theme === "dark");
           });
+
+        // Obtener estado (pero no se muestra)
+        fetch(`http://localhost:3008/api/status/${uid}`)
+          .then((res) => res.json())
+          .then((statusData) => {
+            setSettings((prev) => ({ ...prev, status: statusData.status }));
+          })
+          .catch((err) => console.error("Error al obtener estado:", err));
       } catch (err) {
         console.error("Token inválido", err);
       }
@@ -36,18 +49,24 @@ const SettingsPage = () => {
     fetch(`http://localhost:3007/api/settings/${userId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(settings),
+      body: JSON.stringify({ theme: settings.theme }),
     })
       .then((res) => res.json())
       .then((data) => {
-        setSettings(data);
+        setSettings((prev) => ({ ...prev, theme: data.theme }));
         document.body.classList.toggle("dark-theme", data.theme === "dark");
+        navigate("/home"); // 🔁 Redirige después de guardar
       })
       .catch((err) => console.error(err));
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+    <div style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "100vh"
+    }}>
       <div style={{
         backgroundColor: "var(--card-bg, #fff)",
         color: "var(--text-color, #000)",
@@ -58,11 +77,26 @@ const SettingsPage = () => {
         maxWidth: "400px",
         textAlign: "center"
       }}>
-        <h2 style={{ marginBottom: "1rem" }}>⚙️ Configuración del Usuario</h2>
+        <h2 style={{
+          marginBottom: "1rem",
+          color: "var(--text-color, #000)"
+        }}>
+          ⚙️ Configuración del Usuario
+        </h2>
 
         <div style={{ marginBottom: "1rem", textAlign: "left" }}>
-          <label>Tema:</label><br />
-          <select name="theme" value={settings.theme} onChange={handleChange} style={{ width: "100%", padding: "0.5rem" }}>
+          <label style={{ color: "var(--text-color, #000)" }}>Tema:</label><br />
+          <select
+            name="theme"
+            value={settings.theme}
+            onChange={handleChange}
+            style={{
+              width: "100%",
+              padding: "0.5rem",
+              backgroundColor: "var(--card-bg, #fff)",
+              color: "var(--text-color, #000)"
+            }}
+          >
             <option value="light">Claro</option>
             <option value="dark">Oscuro</option>
           </select>
@@ -96,7 +130,7 @@ const SettingsPage = () => {
             cursor: "pointer"
           }}
         >
-          Volver
+          NOTARY
         </button>
       </div>
     </div>
