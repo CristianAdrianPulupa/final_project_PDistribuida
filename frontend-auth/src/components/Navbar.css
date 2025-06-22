@@ -99,3 +99,21 @@
 .notification-dropdown li:last-child {
   border-bottom: none;
 }
+
+.settings-link {
+  margin-left: 1rem;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.settings-link:hover {
+  text-decoration: underline;
+}
+
+body.dark-theme .navbar .brand {
+  color: white;
+}

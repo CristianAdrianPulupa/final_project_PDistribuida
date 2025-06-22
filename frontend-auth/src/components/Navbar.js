@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaBell } from "react-icons/fa";
-import { jwtDecode } from 'jwt-decode'; // ✅
+import { FaBell, FaCog } from "react-icons/fa";
+import { jwtDecode } from 'jwt-decode';
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -35,7 +35,11 @@ export default function Navbar() {
       <div className="navbar-left">
         <img src="/images/notary-logo1.png" alt="Notary" className="logo" />
         <span className="brand">Notary</span>
+        <a href="/settings" className="settings-link">
+          <FaCog /> Ajustes
+        </a>
       </div>
+
       <div className="navbar-right">
         <a href="#funcionalidades">Funcionalidades</a>
         <a href="#comunidad">Comunidad</a>

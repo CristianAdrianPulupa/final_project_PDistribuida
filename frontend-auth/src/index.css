@@ -88,3 +88,51 @@ body, html {
   color: crimson;
   text-align: center;
 }
+
+/* 🌙 TEMA OSCURO GENERAL */
+.dark-theme {
+  background-color: #121212;
+  color: #f5f5f5;
+}
+
+/* NAVBAR oscuro */
+.dark-theme .navbar {
+  background-color: #1f1f1f;
+  color: #ffffff;
+}
+
+/* Enlaces dentro de Navbar en modo oscuro */
+.dark-theme .navbar a,
+.dark-theme .settings-link,
+.dark-theme .nav-link {
+  color: #90caf9;
+}
+
+.dark-theme .navbar a:hover {
+  text-decoration: underline;
+}
+
+/* INPUTS, SELECTS y BOTONES en modo oscuro */
+.dark-theme select,
+.dark-theme button,
+.dark-theme input[type="text"],
+.dark-theme input[type="email"],
+.dark-theme input[type="password"] {
+  background-color: #2b2b2b;
+  color: #f5f5f5;
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+/* Botón 'Guardar Cambios' en oscuro */
+.dark-theme button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.dark-theme button:hover {
+  background-color: #135abe;
+}

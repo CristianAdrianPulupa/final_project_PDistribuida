@@ -5,7 +5,9 @@ import "./App.css";
 import Home from "./Home";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from './pages/EditProfilePage';
-
+import SettingsPage from "./pages/SettingsPage";
+import { useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 
 
 // Componente de login/registro
@@ -116,8 +118,26 @@ function AuthApp() {
   );
 }
 
-// Enrutador principal
 export default function App() {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const userId = decoded.id || decoded.userId;
+
+        fetch(`http://localhost:3007/api/settings/${userId}`)
+          .then((res) => res.json())
+          .then((data) => {
+            // Aplicar o quitar clase dark-theme
+            document.body.classList.toggle("dark-theme", data.theme === "dark");
+          });
+      } catch (err) {
+        console.error("Token inválido al cargar tema:", err);
+      }
+    }
+  }, []);
+
   return (
     <Router>
       <Routes>
@@ -125,6 +145,7 @@ export default function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </Router>
   );

@@ -126,6 +126,14 @@ services:
       - mongo
     env_file:
       - ./backend/user-domain/notification-service/.env
+
+  user-settings:
+    build: ./backend/user-domain/user-settings-service
+    ports:
+      - "3007:3007"
+    environment:
+      - PORT=3007
+
 volumes:
   mongo-data:
   mysql-data:
