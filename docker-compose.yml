@@ -1,0 +1,162 @@
+version: '3.9'
+
+services:
+  # 🗃️ Bases de Datos
+  mongo:
+    image: mongo
+    container_name: notary-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  mysql:
+    image: mysql:8
+    container_name: notary-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notarydb
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  postgres:
+    image: postgres:14
+    container_name: notary-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: notarydb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+    container_name: notary-redis
+    ports:
+      - "6379:6379"
+
+  neo4j:
+    image: neo4j
+    container_name: notary-neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: neo4j/claveSegura123
+
+  # 🔐 Microservicios – user-domain
+  users-service:
+    build: ./backend/user-domain/users-service
+    container_name: users-service
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./backend/user-domain/users-service/.env
+    depends_on:
+      - mongo
+
+  roles-service:
+    build: ./backend/user-domain/roles-service
+    container_name: roles-service
+    ports:
+      - "3002:3002"
+    env_file:
+      - ./backend/user-domain/roles-service/.env
+    depends_on:
+      - mysql
+
+  sessions-service:
+    build: ./backend/user-domain/sessions-service
+    container_name: sessions-service
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./backend/user-domain/sessions-service/.env
+    depends_on:
+      - mongo
+
+  auth-middleware-service:
+    build: ./backend/user-domain/auth-middleware-service
+    container_name: auth-middleware-service
+    ports:
+      - "3004:3004"
+    env_file:
+      - ./backend/user-domain/auth-middleware-service/.env
+
+  permissions-service:
+    build: ./backend/user-domain/permissions-service
+    container_name: permissions-service
+    ports:
+      - "3005:3005"
+    env_file:
+      - ./backend/user-domain/permissions-service/.env
+    depends_on:
+      - mongo
+
+  profile-service:
+    build: ./backend/user-domain/profile-service
+    container_name: profile-service
+    ports:
+      - "3006:3006"
+    env_file:
+      - ./backend/user-domain/profile-service/.env
+    depends_on:
+      - postgres
+
+  track-service:
+    build: ./backend/music-domain/track-service
+    container_name: track-service
+    ports:
+      - "3010:3010"
+    env_file:
+      - ./backend/music-domain/track-service/.env
+    depends_on:
+      - mongo
+      - effects-calculator-service
+
+  effects-calculator-service:
+    build: ./backend/music-domain/effects-calculator-service
+    container_name: effects-calculator-service
+    ports:
+      - "3011:3011"
+
+  audio-engine-service:
+    build: ./backend/music-domain/audio-engine-service
+    container_name: audio-engine-service
+    ports:
+      - "3012:3012"
+
+  waveform-service:
+    build: ./backend/music-domain/waveform-service
+    container_name: waveform-service
+    ports:
+      - "3013:3013"
+    env_file:
+      - ./backend/music-domain/waveform-service/.env
+  
+  export-service:
+    build: ./backend/music-domain/export-service
+    container_name: export-service
+    ports:
+      - "3014:3014"
+    env_file:
+      - ./backend/music-domain/export-service/.env
+
+  timeline-service:
+    build: ./backend/music-domain/timeline-service
+    container_name: timeline-service
+    ports:
+      - "3015:3015"
+    env_file:
+      - ./backend/music-domain/timeline-service/.env
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
+  mysql-data:
+  postgres-data:

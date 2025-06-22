@@ -1,0 +1,37 @@
+.home-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+  background-color: #f8f9fc;
+  padding: 2rem 5rem;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.home-text {
+  max-width: 100%;
+}
+
+.home-text h1 {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  color: #212529;
+  line-height: 1; /* mejora el espaciado interno */
+}
+
+.home-text p {
+  font-size: 2rem;
+  color: #495057;
+}
+
+.home-illustration {
+  max-width: 45%;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}

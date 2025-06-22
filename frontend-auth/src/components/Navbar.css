@@ -1,0 +1,39 @@
+.navbar {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 40px;
+  height: 35px;
+  margin-right: 0.5rem;
+}
+
+.brand {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.navbar-right a {
+  margin-left: 1.5em;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.navbar-right a:hover {
+  text-decoration: underline;
+}
