@@ -134,6 +134,16 @@ services:
     environment:
       - PORT=3007
 
+  frontend:
+    build: ./frontend-auth
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend-auth:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
 volumes:
   mongo-data:
   mysql-data:
