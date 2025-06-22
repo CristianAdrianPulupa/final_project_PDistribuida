@@ -28,7 +28,7 @@ router.get('/admin/dashboard', authMiddleware, isAdmin, (req, res) => {
 // Ruta para obtener todos los usuarios (solo admin)
 router.get('/all', authMiddleware, isAdmin, async (req, res) => {
   try {
-    const users = await User.find({}, 'name email role'); // Solo campos útiles
+    const users = await User.find({}, 'name email role');
     res.json({ users });
   } catch (err) {
     console.error('Error al obtener usuarios:', err);
@@ -36,4 +36,4 @@ router.get('/all', authMiddleware, isAdmin, async (req, res) => {
   }
 });
 
-module.exports = router; // 👈 Esta línea es clave
+module.exports = router;

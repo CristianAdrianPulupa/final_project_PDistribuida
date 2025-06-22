@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const axios = require('axios');
 
 // REGISTRO
 const register = async (req, res) => {
@@ -23,10 +24,23 @@ const register = async (req, res) => {
 
     await user.save();
 
+    // Crear perfil en profile-service (⚠️ usamos el nombre del contenedor)
+    try {
+      await axios.post('http://profile-service:3006/api/profile', {
+        userId: user._id.toString(),
+        name,
+        email,
+        bio: 'Soy nuevo en la plataforma',
+        image: 'https://i.imgur.com/anon.png'
+      });
+    } catch (profileErr) {
+      console.error('Error al crear perfil:', profileErr.message);
+    }
+
     res.status(201).json({ message: 'Usuario registrado correctamente' });
   } catch (err) {
-  console.error(err); 
-  res.status(500).json({ message: 'Error al registrar usuario', error: err.message });
+    console.error(err);
+    res.status(500).json({ message: 'Error al registrar usuario', error: err.message });
   }
 };
 
@@ -45,11 +59,6 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Contraseña incorrecta' });
     }
 
-    if (!process.env.JWT_SECRET) {
-      console.error('JWT_SECRET no definido');
-      return res.status(500).json({ message: 'Error interno' });
-    }
-
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
@@ -64,4 +73,3 @@ const login = async (req, res) => {
 };
 
 module.exports = { register, login };
-

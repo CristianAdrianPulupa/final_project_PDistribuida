@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useNavigate, BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Home";
+import ProfilePage from "./pages/ProfilePage";
+
 
 // Componente de login/registro
 function AuthApp() {
@@ -119,6 +121,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<AuthApp />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );

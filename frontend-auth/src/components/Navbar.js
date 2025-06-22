@@ -13,6 +13,7 @@ export default function Navbar() {
         <a href="#comunidad">Comunidad</a>
         <a href="#precios">Precios</a>
         <a href="/">Cerrar sesión</a>
+        <a href="/profile" className="nav-link">Perfil</a>
       </div>
     </nav>
   );
