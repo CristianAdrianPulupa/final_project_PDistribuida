@@ -59,44 +59,6 @@ services:
     depends_on:
       - mongo
 
-  roles-service:
-    build: ./backend/user-domain/roles-service
-    container_name: roles-service
-    ports:
-      - "3002:3002"
-    env_file:
-      - ./backend/user-domain/roles-service/.env
-    depends_on:
-      - mysql
-
-  sessions-service:
-    build: ./backend/user-domain/sessions-service
-    container_name: sessions-service
-    ports:
-      - "3003:3003"
-    env_file:
-      - ./backend/user-domain/sessions-service/.env
-    depends_on:
-      - mongo
-
-  auth-middleware-service:
-    build: ./backend/user-domain/auth-middleware-service
-    container_name: auth-middleware-service
-    ports:
-      - "3004:3004"
-    env_file:
-      - ./backend/user-domain/auth-middleware-service/.env
-
-  permissions-service:
-    build: ./backend/user-domain/permissions-service
-    container_name: permissions-service
-    ports:
-      - "3005:3005"
-    env_file:
-      - ./backend/user-domain/permissions-service/.env
-    depends_on:
-      - mongo
-
   profile-service:
     build: ./backend/user-domain/profile-service
     container_name: profile-service
@@ -156,6 +118,14 @@ services:
     depends_on:
       - mongo
 
+  notification-service:
+    build: ./backend/user-domain/notification-service
+    ports:
+      - "3003:3003"
+    depends_on:
+      - mongo
+    env_file:
+      - ./backend/user-domain/notification-service/.env
 volumes:
   mongo-data:
   mysql-data:
