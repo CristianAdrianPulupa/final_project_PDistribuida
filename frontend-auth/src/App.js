@@ -4,6 +4,8 @@ import { useNavigate, BrowserRouter as Router, Routes, Route } from "react-route
 import "./App.css";
 import Home from "./Home";
 import ProfilePage from "./pages/ProfilePage";
+import EditProfilePage from './pages/EditProfilePage';
+
 
 
 // Componente de login/registro
@@ -122,6 +124,7 @@ export default function App() {
         <Route path="/" element={<AuthApp />} />
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/edit-profile" element={<EditProfilePage />} />
       </Routes>
     </Router>
   );

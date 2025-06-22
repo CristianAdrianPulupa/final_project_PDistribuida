@@ -54,7 +54,7 @@ const ProfilePage = () => {
         </div>
 
         <div className="profile-buttons">
-          <button className="btn edit" onClick={() => alert("Aquí se editaría")}>
+          <button className="btn edit" onClick={() => navigate('/edit-profile')}>
             <FaEdit /> Editar
           </button>
           <button className="btn back" onClick={() => navigate('/home')}>
