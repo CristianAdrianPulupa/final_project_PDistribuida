@@ -8,6 +8,7 @@ import EditProfilePage from './pages/EditProfilePage';
 import SettingsPage from "./pages/SettingsPage";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
+import NotesPage from "./pages/NotesPage";
 
 
 // Componente de login/registro
@@ -146,6 +147,7 @@ export default function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/notes" element={<NotesPage />} />
       </Routes>
     </Router>
   );

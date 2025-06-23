@@ -152,6 +152,14 @@ services:
         - ./backend/user-domain/user-status-service/.env
       depends_on:
         - mongo
+  user-notes-service:
+    build: ./backend/user-domain/user-notes-service
+    ports:
+      - "3009:3009"
+    env_file:
+      - ./backend/user-domain/user-notes-service/.env
+    depends_on:
+      - mongo
 
 volumes:
   mongo-data:

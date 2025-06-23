@@ -65,14 +65,18 @@ const ProfilePage = () => {
           <p className="bio">{profile.bio}</p>
         </div>
 
-        <div className="profile-buttons">
-          <button className="btn edit" onClick={() => navigate('/edit-profile')}>
-            <FaEdit /> Editar
-          </button>
-          <button className="btn back" onClick={() => navigate('/home')}>
-            ← Volver
-          </button>
-        </div>
+      <div className="profile-buttons">
+        <button className="btn edit" onClick={() => navigate('/edit-profile')}>
+          <FaEdit /> Editar
+        </button>
+        <button className="btn" onClick={() => navigate('/notes')}>
+        📝 Notas
+        </button>
+        <button className="btn back" onClick={() => navigate('/home')}>
+          ← Volver
+        </button>
+      </div>
+
       </motion.div>
     </div>
   );
