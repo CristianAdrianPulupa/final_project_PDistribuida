@@ -22,22 +22,22 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
-          docker build -t cristian2000p/users-service ./Backend/Domain/User/GetUser
+          docker build -t cristian2000p/users-service ./backend/user-domain/users-service
           docker push cristian2000p/users-service
 
-          docker build -t cristian2000p/profile-service ./Backend/Domain/User/Profile
+          docker build -t cristian2000p/profile-service ./backend/user-domain/profile-service
           docker push cristian2000p/profile-service
 
-          docker build -t cristian2000p/notification-service ./Backend/Domain/User/Notification
+          docker build -t cristian2000p/notification-service ./backend/user-domain/notification-service
           docker push cristian2000p/notification-service
 
-          docker build -t cristian2000p/user-settings-service ./Backend/Domain/User/UserSettings
+          docker build -t cristian2000p/user-settings-service ./backend/user-domain/user-settings-service
           docker push cristian2000p/user-settings-service
 
-          docker build -t cristian2000p/user-status-service ./Backend/Domain/User/UserStatus
+          docker build -t cristian2000p/user-status-service ./backend/user-domain/user-status-service
           docker push cristian2000p/user-status-service
 
-          docker build -t cristian2000p/user-notes-service ./Backend/Domain/User/UserNotes
+          docker build -t cristian2000p/user-notes-service ./backend/user-domain/user-notes-service
           docker push cristian2000p/user-notes-service
 
       - name: Deploy all user-domain microservices to EC2
