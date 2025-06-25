@@ -1,0 +1,24 @@
+name: Build and Push Docker Images (Qa)
+
+on:
+  push:
+    branches:
+      - Qa
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+      - name: Build and push users-service image
+        run: |
+          cd backend/user-domain/users-service
+          docker build -t cristian2000p/users-service:latest .
+          docker push cristian2000p/users-service:latest
