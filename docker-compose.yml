@@ -40,13 +40,15 @@ services:
       - "6379:6379"
 
   neo4j:
-    image: neo4j
-    container_name: notary-neo4j
+    image: neo4j:latest
+    container_name: neo4j
     ports:
-      - "7474:7474"
       - "7687:7687"
+      - "7474:7474"
     environment:
-      NEO4J_AUTH: neo4j/claveSegura123
+      - NEO4J_AUTH=neo4j/NotaryEdu2025
+    volumes:
+      - neo4j-data:/data
 
   # 🔐 Microservicios – user-domain
   users-service:
@@ -69,57 +71,9 @@ services:
     depends_on:
       - postgres
 
-  track-service:
-    build: ./backend/music-domain/track-service
-    container_name: track-service
-    ports:
-      - "3010:3010"
-    env_file:
-      - ./backend/music-domain/track-service/.env
-    depends_on:
-      - mongo
-      - effects-calculator-service
-
-  effects-calculator-service:
-    build: ./backend/music-domain/effects-calculator-service
-    container_name: effects-calculator-service
-    ports:
-      - "3011:3011"
-
-  audio-engine-service:
-    build: ./backend/music-domain/audio-engine-service
-    container_name: audio-engine-service
-    ports:
-      - "3012:3012"
-
-  waveform-service:
-    build: ./backend/music-domain/waveform-service
-    container_name: waveform-service
-    ports:
-      - "3013:3013"
-    env_file:
-      - ./backend/music-domain/waveform-service/.env
-  
-  export-service:
-    build: ./backend/music-domain/export-service
-    container_name: export-service
-    ports:
-      - "3014:3014"
-    env_file:
-      - ./backend/music-domain/export-service/.env
-
-  timeline-service:
-    build: ./backend/music-domain/timeline-service
-    container_name: timeline-service
-    ports:
-      - "3015:3015"
-    env_file:
-      - ./backend/music-domain/timeline-service/.env
-    depends_on:
-      - mongo
-
   notification-service:
     build: ./backend/user-domain/notification-service
+    container_name: notification-service
     ports:
       - "3003:3003"
     depends_on:
@@ -129,13 +83,162 @@ services:
 
   user-settings:
     build: ./backend/user-domain/user-settings-service
+    container_name: user-settings
     ports:
       - "3007:3007"
     environment:
       - PORT=3007
 
+  user-status-service:
+    build: ./backend/user-domain/user-status-service
+    container_name: user-status-service
+    ports:
+      - "3008:3008"
+    env_file:
+      - ./backend/user-domain/user-status-service/.env
+    depends_on:
+      - mongo
+
+  user-notes-service:
+    build: ./backend/user-domain/user-notes-service
+    container_name: user-notes-service
+    ports:
+      - "3009:3009"
+    env_file:
+      - ./backend/user-domain/user-notes-service/.env
+    depends_on:
+      - mongo
+
+  # 🎼 Microservicios – content-domain
+  scales-service:
+    build: ./backend/content-domain/scales-service
+    container_name: scales-service
+    ports:
+      - "5001:5001"
+    depends_on:
+      - postgres
+    env_file:
+      - ./backend/content-domain/scales-service/.env
+
+  chords-service:
+    build: ./backend/content-domain/chords-service
+    container_name: chords-service
+    ports:
+      - "5002:5002"
+    depends_on:
+      - postgres
+    env_file:
+      - ./backend/content-domain/chords-service/.env
+
+  theory-service:
+    build: ./backend/content-domain/theory-service
+    container_name: theory-service
+    ports:
+      - "5003:5003"
+    depends_on:
+      - postgres
+    env_file:
+      - ./backend/content-domain/theory-service/.env
+
+  instrument-guide-service:
+    build: ./backend/content-domain/instrument-guide-service
+    container_name: instrument-guide-service
+    ports:
+      - "5004:5004"
+    depends_on:
+      - postgres
+    env_file:
+      - ./backend/content-domain/instrument-guide-service/.env
+
+  music-quiz-service:
+    build: ./backend/content-domain/music-quiz-service
+    container_name: music-quiz-service
+    ports:
+      - "5005:5005"
+    depends_on:
+      - postgres
+    env_file:
+      - ./backend/content-domain/music-quiz-service/.env
+
+  daily-lesson-service:
+    build: ./backend/content-domain/daily-lesson-service
+    container_name: daily-lesson-service
+    ports:
+      - "5007:5007"
+    depends_on:
+      - postgres
+    env_file:
+      - ./backend/content-domain/daily-lesson-service/.env
+
+  # 💬 Microservicios – community-feedback-domain
+  feedback-service:
+    build: ./backend/community-feedback-domain/feedback-service
+    container_name: feedback-service
+    ports:
+      - "3010:3010"
+    depends_on:
+      - mongo
+    env_file:
+      - ./backend/community-feedback-domain/feedback-service/.env
+
+  faq-service:
+    build: ./backend/community-feedback-domain/faq-service
+    container_name: faq-service
+    ports:
+      - "3011:3011"
+
+  support-chat-service:
+    build: ./backend/community-feedback-domain/support-chat-service
+    container_name: support-chat-service
+    ports:
+      - "3012:3012"
+    depends_on:
+      - redis
+
+  user-report-service:
+    build: ./backend/community-feedback-domain/user-report-service
+    container_name: user-report-service
+    ports:
+      - "3013:80"
+
+  relationship-graph-simple:
+    build: ./backend/community-feedback-domain/relationship-graph-simple
+    container_name: relationship-graph-simple
+    ports:
+      - "3016:3016"
+    depends_on:
+      - neo4j
+
+  music-meter-guide-service:
+    build: ./backend/learning-tools-domain/music-meter-guide-service
+    container_name: music-meter-guide-service
+    ports:
+      - "3020:3020"
+    depends_on:
+      - mongo
+    env_file:
+      - ./backend/learning-tools-domain/music-meter-guide-service/.env
+
+  music-glossary-service:
+    build: ./backend/learning-tools-domain/music-glossary-service
+    container_name: music-glossary-service
+    ports:
+      - "3030:3030"
+    volumes:
+      - glossary-data:/app/app/database
+
+  note-learning-service:
+    build: ./backend/learning-tools-domain/note-learning-service
+    container_name: note-learning-service
+    ports:
+      - "3040:3040"
+    volumes:
+      - note-data:/app
+
+  # 💻 Frontend
   frontend:
     build: ./frontend-auth
+    container_name: frontend
     ports:
       - "3000:3000"
     volumes:
@@ -144,24 +247,10 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
 
-  user-status-service:
-      build: ./backend/user-domain/user-status-service
-      ports:
-        - "3008:3008"
-      env_file:
-        - ./backend/user-domain/user-status-service/.env
-      depends_on:
-        - mongo
-  user-notes-service:
-    build: ./backend/user-domain/user-notes-service
-    ports:
-      - "3009:3009"
-    env_file:
-      - ./backend/user-domain/user-notes-service/.env
-    depends_on:
-      - mongo
-
 volumes:
   mongo-data:
   mysql-data:
+  note-data:
   postgres-data:
+  neo4j-data:
+  glossary-data:

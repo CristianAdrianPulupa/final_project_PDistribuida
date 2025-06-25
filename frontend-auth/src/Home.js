@@ -8,10 +8,10 @@ export default function Home() {
       <Navbar /> {/* 👈 barra superior */}
       <div className="home-container">
         <div className="home-text">
-          <h1>Escribe música online en conjunto</h1>
+          <h1>Plataforma para el aprendizaje musical</h1>
 
           <p>
-            Notary es una plataforma de notación musical colaborativa para
+            Notary es una plataforma de notación musical para
             principiantes y profesionales. ¡Comienza tu viaje musical hoy!
           </p>
         </div>
