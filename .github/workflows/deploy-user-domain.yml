@@ -3,12 +3,7 @@ name: deploy
 on:
   push:
     branches:
-      - QA
-
-env:
-  EC2_USER: ec2-user
-  EC2_HOST: ${{ secrets.EC2_HOST }}
-  EC2_KEY: ${{ secrets.EC2_KEY }}
+      - main
 
 jobs:
   deploy:
@@ -20,66 +15,67 @@ jobs:
 
       - name: Login to DockerHub and Push All Images
         run: |
-          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-          docker build -t jeffri1997/users-service ./Backend/Domain/User/GetUser
-          docker push jeffri1997/users-service
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/users-service ./backend/user-domain/users-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/users-service
 
-          docker build -t jeffri1997/profile-service ./Backend/Domain/User/Profile
-          docker push jeffri1997/profile-service
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/profile-service ./backend/user-domain/profile-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/profile-service
 
-          docker build -t jeffri1997/notification-service ./Backend/Domain/User/Notification
-          docker push jeffri1997/notification-service
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/notification-service ./backend/user-domain/notification-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/notification-service
 
-          docker build -t jeffri1997/user-settings-service ./Backend/Domain/User/UserSettings
-          docker push jeffri1997/user-settings-service
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/user-settings-service ./backend/user-domain/user-settings-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/user-settings-service
 
-          docker build -t jeffri1997/user-status-service ./Backend/Domain/User/UserStatus
-          docker push jeffri1997/user-status-service
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/user-status-service ./backend/user-domain/user-status-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/user-status-service
 
-          docker build -t jeffri1997/user-notes-service ./Backend/Domain/User/UserNotes
-          docker push jeffri1997/user-notes-service
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/user-notes-service ./backend/user-domain/user-notes-service
+          docker push ${{ secrets.DOCKER_USERNAME }}/user-notes-service
 
       - name: Deploy all user-domain microservices to EC2
-        uses: appleboy/ssh-action@v0.1.0
+        uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ env.EC2_HOST }}
-          username: ${{ env.EC2_USER }}
-          key: ${{ env.EC2_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          port: 22
           script: |
-            docker pull jeffri1997/users-service
-            docker pull jeffri1997/profile-service
-            docker pull jeffri1997/notification-service
-            docker pull jeffri1997/user-settings-service
-            docker pull jeffri1997/user-status-service
-            docker pull jeffri1997/user-notes-service
+            docker pull ${{ secrets.DOCKER_USERNAME }}/users-service
+            docker pull ${{ secrets.DOCKER_USERNAME }}/profile-service
+            docker pull ${{ secrets.DOCKER_USERNAME }}/notification-service
+            docker pull ${{ secrets.DOCKER_USERNAME }}/user-settings-service
+            docker pull ${{ secrets.DOCKER_USERNAME }}/user-status-service
+            docker pull ${{ secrets.DOCKER_USERNAME }}/user-notes-service
 
             docker stop users-service || true && docker rm users-service || true
             docker run -d --name users-service -p 3001:3001 \
-              -e MONGO_URI=mongodb://172.17.0.1:27017/notary_users \
-              jeffri1997/users-service
+              -e MONGO_URI=mongodb://52.21.76.42:27017/notary_users \
+              ${{ secrets.DOCKER_USERNAME }}/users-service
 
             docker stop profile-service || true && docker rm profile-service || true
             docker run -d --name profile-service -p 3006:3006 \
-              -e MONGO_URI=mongodb://172.17.0.1:27017/notary_profiles \
-              jeffri1997/profile-service
+              -e MONGO_URI=mongodb://52.21.76.42:27017/notary_profiles \
+              ${{ secrets.DOCKER_USERNAME }}/profile-service
 
             docker stop notification-service || true && docker rm notification-service || true
             docker run -d --name notification-service -p 3003:3003 \
-              -e MONGO_URI=mongodb://172.17.0.1:27017/notificationsdb \
-              jeffri1997/notification-service
+              -e MONGO_URI=mongodb://52.21.76.42:27017/notificationsdb \
+              ${{ secrets.DOCKER_USERNAME }}/notification-service
 
             docker stop user-settings-service || true && docker rm user-settings-service || true
             docker run -d --name user-settings-service -p 3007:3007 \
-              -e MONGO_URI=mongodb://172.17.0.1:27017/usersettingsdb \
-              jeffri1997/user-settings-service
+              -e MONGO_URI=mongodb://52.21.76.42:27017/usersettingsdb \
+              ${{ secrets.DOCKER_USERNAME }}/user-settings-service
 
             docker stop user-status-service || true && docker rm user-status-service || true
             docker run -d --name user-status-service -p 3008:3008 \
-              -e MONGO_URI=mongodb://172.17.0.1:27017/user-status-db \
-              jeffri1997/user-status-service
+              -e MONGO_URI=mongodb://52.21.76.42:27017/user-status-db \
+              ${{ secrets.DOCKER_USERNAME }}/user-status-service
 
             docker stop user-notes-service || true && docker rm user-notes-service || true
             docker run -d --name user-notes-service -p 3009:3009 \
-              -e MONGO_URI=mongodb://172.17.0.1:27017/notarydb \
-              jeffri1997/user-notes-service
+              -e MONGO_URI=mongodb://52.21.76.42:27017/usernotesdb \
+              ${{ secrets.DOCKER_USERNAME }}/user-notes-service
