@@ -1,22 +1,22 @@
 const UserSettings = require('../models/UserSettings');
 
-// Obtener configuración
+// Get configuration
 exports.getSettings = async (req, res) => {
   try {
     const { userId } = req.params;
     const settings = await UserSettings.findOne({ userId });
 
     if (!settings) {
-      return res.status(404).json({ message: 'Configuración no encontrada' });
+      return res.status(404).json({ message: 'Configuration not found' });
     }
 
     res.json(settings);
   } catch (err) {
-    res.status(500).json({ error: 'Error al obtener configuración' });
+    res.status(500).json({ error: 'Error getting configuration' });
   }
 };
 
-// Actualizar o crear configuración
+// Update or create configuration
 exports.updateSettings = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -30,6 +30,6 @@ exports.updateSettings = async (req, res) => {
 
     res.json(settings);
   } catch (err) {
-    res.status(500).json({ error: 'Error al guardar configuración' });
+    res.status(500).json({ error: 'Error updating configuration' });
   }
 };

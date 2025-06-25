@@ -1,0 +1,41 @@
+name: Deploy User Settings Service
+
+on:
+  push:
+    branches:
+      - QA
+    paths:
+      - 'backend/user-domain/user-settings-service/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Docker image
+        run: |
+          docker build -t cristian2000p/user-settings-service ./backend/user-domain/user-settings-service
+          docker push cristian2000p/user-settings-service
+
+      - name: Deploy to EC2 instance 3
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST_3 }}
+          username: ${{ secrets.EC2_USER_3 }}
+          key: ${{ secrets.EC2_KEY_3 }}
+          script: |
+            docker rm -f user-settings-service || true
+            docker pull cristian2000p/user-settings-service
+            docker run -d --name user-settings-service -p 3007:3007 \
+              -e MONGO_URI=mongodb://172.17.0.1:27017/user_settings_db \
+              -e PORT=3007 \
+              cristian2000p/user-settings-service
