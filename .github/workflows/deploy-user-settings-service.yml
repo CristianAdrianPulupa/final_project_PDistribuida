@@ -33,9 +33,9 @@ jobs:
           username: ${{ secrets.EC2_USER_3 }}
           key: ${{ secrets.EC2_KEY_3 }}
           script: |
-            docker rm -f user-settings-service || true
-            docker pull cristian2000p/user-settings-service
-            docker run -d --name user-settings-service -p 3007:3007 \
-              -e MONGO_URI=mongodb://172.17.0.1:27017/user_settings_db \
-              -e PORT=3007 \
-              cristian2000p/user-settings-service
+            sudo docker rm -f user-settings-service || true
+            sudo docker pull cristian2000p/user-settings-service
+            sudo docker run -d --name user-settings-service -p 3007:3007 \
+            -e MONGO_URI=mongodb://172.17.0.1:27017/user_settings_db \
+            -e PORT=3007 \
+            cristian2000p/user-settings-service
