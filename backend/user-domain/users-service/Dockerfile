@@ -1,7 +1,7 @@
 # Usa una imagen oficial de Node.js
 FROM node:18
 
-# Crea el directorio de trabajo dentro del contenedor
+# Crea el directorio de trabajo dentro del contenedorr
 WORKDIR /app
 
 # Copia los archivos de dependencias
