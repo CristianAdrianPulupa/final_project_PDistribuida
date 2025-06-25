@@ -5,34 +5,34 @@ const authMiddleware = require('../middlewares/authMiddleware');
 const isAdmin = require('../middlewares/isAdmin');
 const User = require('../models/User');
 
-// Rutas públicas
+// Public routes
 router.post('/register', register);
 router.post('/login', login);
 
-// Ruta protegida para usuarios autenticados
+// Protected route for authenticated users
 router.get('/profile', authMiddleware, (req, res) => {
   res.json({
-    message: 'Ruta protegida: perfil de usuario',
+    message: 'Protected route: user profile',
     user: req.user
   });
 });
 
-// Ruta protegida solo para admins
+// Protected route for admins only
 router.get('/admin/dashboard', authMiddleware, isAdmin, (req, res) => {
   res.json({
-    message: 'Bienvenido al panel de administrador',
+    message: 'Welcome to the admin dashboard',
     user: req.user
   });
 });
 
-// Ruta para obtener todos los usuarios (solo admin)
+// Route to get all users (admin only)
 router.get('/all', authMiddleware, isAdmin, async (req, res) => {
   try {
     const users = await User.find({}, 'name email role');
     res.json({ users });
   } catch (err) {
-    console.error('Error al obtener usuarios:', err);
-    res.status(500).json({ message: 'Error al obtener usuarios' });
+    console.error('Error fetching users:', err);
+    res.status(500).json({ message: 'Error fetching users' });
   }
 });
 

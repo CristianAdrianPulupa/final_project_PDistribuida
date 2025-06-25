@@ -1,21 +1,21 @@
-# Usa una imagen oficial de Node.js
+# Use an official Node.js image
 FROM node:18
 
-# Crea el directorio de trabajo dentro del contenedor
+# Create the working directory inside the container
 WORKDIR /app
 
-# Copia los archivos de dependencias
+# Copy dependency files
 COPY package*.json ./
 
-# Instala las dependencias
+# Install dependencies
 RUN npm install
 
-# Copia el resto del código fuente (incluye server.js y src/)
+# Copy the rest of the source code (includes server.js and src/)
 COPY . .
 
-# Expone el puerto que usará el servicio
+# Expose the port that the service will use
 EXPOSE 3001
 
-# Comando por defecto para ejecutar el microservicio
+# Default command to run the microservice
 CMD ["node", "server.js"]
 

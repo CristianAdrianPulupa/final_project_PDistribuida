@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const axios = require('axios');
 
-// REGISTRO
+// RECORD
 const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -24,7 +24,7 @@ const register = async (req, res) => {
 
     await user.save();
 
-    // Crear perfil
+    // Create profile
     try {
       await axios.post('http://profile-service:3006/api/profile', {
         userId: user._id.toString(),
@@ -34,13 +34,13 @@ const register = async (req, res) => {
         image: 'https://i.imgur.com/anon.png'
       });
     } catch (profileErr) {
-      console.error('Error al crear perfil:', profileErr.message);
+      console.error('Error creating profile:', profileErr.message);
     }
 
-    res.status(201).json({ message: 'Usuario registrado correctamente' });
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Error al registrar usuario', error: err.message });
+    res.status(500).json({ message: 'Error registering user', error: err.message });
   }
 };
 
@@ -51,12 +51,12 @@ const login = async (req, res) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ message: 'Usuario no encontrado' });
+      return res.status(404).json({ message: 'User not found' });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Contraseña incorrecta' });
+      return res.status(401).json({ message: 'Incorrect password' });
     }
 
     const token = jwt.sign(
@@ -65,20 +65,20 @@ const login = async (req, res) => {
       { expiresIn: '2h' }
     );
 
-    // ✅ ACTUALIZAR ESTADO A "activo" EN user-status-service
+    // ✅ UPDATE STATUS TO "active" IN user-status-service
     try {
       await axios.post('http://user-status-service:3008/api/status', {
         userId: user._id.toString(),
-        status: "activo"
+        status: "active"
       });
     } catch (statusErr) {
-      console.error('⚠️ Error al actualizar estado del usuario:', statusErr.message);
+      console.error('⚠️ Error updating user status:', statusErr.message);
     }
 
-    res.status(200).json({ message: 'Inicio de sesión exitoso', token });
+    res.status(200).json({ message: 'Login successful', token });
   } catch (err) {
-    console.error('Error en login:', err);
-    res.status(500).json({ message: 'Error al iniciar sesión' });
+    console.error('Error in login:', err);
+    res.status(500).json({ message: 'Error logging in' });
   }
 };
 
