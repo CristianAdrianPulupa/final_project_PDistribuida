@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const connectDB = require('./config/db'); // ✅ nueva ruta correcta
+const connectDB = require('./config/db'); // ✅ new correct route
 
 const app = express();
 app.use(cors());

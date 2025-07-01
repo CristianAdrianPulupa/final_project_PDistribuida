@@ -12,8 +12,8 @@ app.use(express.json());
 app.use("/api/status", statusRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ Mongo conectado"))
-  .catch(err => console.error("❌ Error Mongo:", err));
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch(err => console.error("❌ MongoDB connection error:", err));
 
 app.get("/", (req, res) => res.send("User Status Service running"));
 

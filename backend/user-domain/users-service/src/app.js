@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const app = express();
 
-console.log('🟡 Cargando middleware CORS...');
+console.log('🟡 loading middleware CORS...');
 app.use(cors({
   origin: 'http://localhost:3000',
   credentials: true,
@@ -14,18 +14,18 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-console.log('🟡 Cargando middleware JSON...');
+console.log('🟡 loading middleware JSON...');
 app.use(express.json());
 
-console.log('🟢 Montando rutas de usuarios en /api/users...');
+console.log('🟢 mounting user routes on /api/users...');
 app.use('/api/users', userRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('✅ MongoDB conectado (users-service)'))
-.catch(err => console.error('❌ Error de conexión MongoDB:', err));
+.then(() => console.log('✅ MongoDB connected (users-service)'))
+.catch(err => console.error('❌ MongoDB connection error:', err));
 
 app.get('/', (req, res) => {
   res.send('Users service is running!');
