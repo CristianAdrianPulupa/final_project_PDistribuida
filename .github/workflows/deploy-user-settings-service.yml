@@ -2,10 +2,10 @@ name: Deploy User Settings Service
 
 on:
   push:
-    branches:
-      - QA
+    branches: [ QA ]
     paths:
       - 'backend/user-domain/user-settings-service/**'
+  workflow_dispatch:   # <— añade esta línea
 
 jobs:
   deploy:
@@ -29,13 +29,29 @@ jobs:
       - name: Deploy to EC2 instance 3
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.EC2_HOST_3 }}
+          host:     ${{ secrets.EC2_HOST_3 }}
           username: ${{ secrets.EC2_USER_3 }}
-          key: ${{ secrets.EC2_KEY_3 }}
+          key:      ${{ secrets.EC2_KEY_3 }}
           script: |
+            # opcional: crear un .env en remoto
+            cat > ~/user-settings-service/.env <<EOF
+            PORT=3001
+            MONGO_URI=${{ secrets.MONGO_URI }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            EOF
+
+            cd ~/user-settings-service
+
+            # elimina versión anterior
             sudo docker rm -f user-settings-service || true
-            sudo docker pull cristian2000p/user-settings-service
-            sudo docker run -d --name user-settings-service -p 3007:3007 \
-            -e MONGO_URI=mongodb://172.17.0.1:27017/user_settings_db \
-            -e PORT=3007 \
-            cristian2000p/user-settings-service
+
+            # tira la última imagen
+            sudo docker pull cristian2000p/user-settings-service:latest
+
+            # arranca con --env-file
+            sudo docker run -d \
+              --name user-settings-service \
+              --restart always \
+              --env-file .env \
+              -p 3001:3001 \
+              cristian2000p/user-settings-service:latest
