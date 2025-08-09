@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from .repository import LessonRepository
 
-lesson_bp = Blueprint('lessons', __name__)
+lesson_bp = Blueprint('lessons', __name__, url_prefix='/api/daily-lessons')
 
 @lesson_bp.route('/lessons', methods=['GET'])
 def get_lessons():

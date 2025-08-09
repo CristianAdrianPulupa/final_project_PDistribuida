@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import jwt_decode from 'jwt-decode'; // ✅ Añade esto
+import jwt_decode from 'jwt-decode';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
-  const [mensaje, setMensaje] = useState('');
-  const navigate = useNavigate();
+  const [mensaje, setMensaje]   = useState('');
+  const navigate                = useNavigate();
+
+  
+  const API_BASE = process.env.REACT_APP_API_BASE_URL;
 
   const handleLogin = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/users/login', {
+      const res = await fetch(`${API_BASE}/api/users/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
 
       const data = await res.json();
-      if (res.ok && data.token) {
-        localStorage.setItem('token', data.token);
 
-        // ✅ Decodificar el token y guardar el userId
+      if (res.ok && data.token) {
+        // guardamos token y userId
+        localStorage.setItem('token', data.token);
         const decoded = jwt_decode(data.token);
         localStorage.setItem('userId', decoded.userId);
 
@@ -30,6 +33,7 @@ const LoginPage = () => {
         setMensaje(data.message || 'Credenciales inválidas ❌');
       }
     } catch (err) {
+      console.error(err);
       setMensaje('Error al conectar con el servidor ❌');
     }
   };
@@ -50,7 +54,7 @@ const LoginPage = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <button onClick={handleLogin}>Iniciar sesión</button>
-      <p>{mensaje}</p>
+      {mensaje && <p>{mensaje}</p>}
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
 
 const SettingsPage = () => {
   const [settings, setSettings] = useState({
@@ -20,7 +21,7 @@ const SettingsPage = () => {
         setUserId(uid);
 
         // Obtener tema
-        fetch(`http://localhost:3007/api/settings/${uid}`)
+        fetch(`${API_BASE}/api/settings/${decoded.userId}`)
           .then((res) => res.json())
           .then((data) => {
             setSettings((prev) => ({ ...prev, theme: data.theme }));
@@ -28,7 +29,7 @@ const SettingsPage = () => {
           });
 
         // Obtener estado (pero no se muestra)
-        fetch(`http://localhost:3008/api/status/${uid}`)
+        fetch(`${API_BASE}/api/status/${uid}`)
           .then((res) => res.json())
           .then((statusData) => {
             setSettings((prev) => ({ ...prev, status: statusData.status }));
@@ -46,7 +47,7 @@ const SettingsPage = () => {
   };
 
   const handleSave = () => {
-    fetch(`http://localhost:3007/api/settings/${userId}`, {
+    fetch(`${API_BASE}/api/settings/${userId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ theme: settings.theme }),

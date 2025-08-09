@@ -17,7 +17,10 @@ def create_chord():
 @chords_bp.route('/chords/<int:chord_id>', methods=['DELETE'])
 def delete_chord(chord_id):
     deleted = ChordRepository.delete(chord_id)
-    return ({"message": "Deleted"} if deleted else {"error": "Not found"}), 200 if deleted else 404
+    if deleted:
+        return {"message": "Chord deleted successfully."}, 200
+    else:
+        return {"error": "Chord not found."}, 404
 
 @chords_bp.route('/chords/<int:chord_id>', methods=['PUT'])
 def update_chord(chord_id):
@@ -31,4 +34,4 @@ def update_chord(chord_id):
             "notes": updated.notes
         }), 200
     else:
-        return {"error": "Not found"}, 404
+        return {"error": "Chord not found."}, 404

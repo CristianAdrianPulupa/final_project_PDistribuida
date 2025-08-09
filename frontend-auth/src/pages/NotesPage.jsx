@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
 const NotesPage = () => {
   const [notes, setNotes] = useState([]);
   const [form, setForm] = useState({ title: "", content: "" });
@@ -11,9 +13,9 @@ const NotesPage = () => {
   const token = localStorage.getItem("token");
   const decoded = jwtDecode(token);
   const userId = decoded.userId || decoded.id;
-
+  
   useEffect(() => {
-    fetch(`http://localhost:3009/api/notes/${userId}`)
+    fetch(`${API_BASE}/api/notes/${userId}`)
       .then(res => res.json())
       .then(setNotes)
       .catch(console.error);
@@ -27,7 +29,7 @@ const NotesPage = () => {
     if (!form.title || !form.content) return;
 
     if (editingId) {
-      const res = await fetch(`http://localhost:3009/api/notes/${editingId}`, {
+      const res = await fetch(`${API_BASE}/api/notes/${editingId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, userId })
@@ -36,7 +38,7 @@ const NotesPage = () => {
       setNotes(notes.map(note => note._id === editingId ? updated : note));
       setEditingId(null);
     } else {
-      const res = await fetch("http://localhost:3009/api/notes", {
+      const res = await fetch(`${API_BASE}/api/notes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, userId })
@@ -54,7 +56,7 @@ const NotesPage = () => {
   };
 
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:3009/api/notes/${id}`, { method: "DELETE" });
+    await fetch(`${API_BASE}/api/notes/${id}`, { method: "DELETE" });
     setNotes(notes.filter(n => n._id !== id));
   };
 

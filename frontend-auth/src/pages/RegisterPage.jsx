@@ -4,14 +4,18 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mensaje, setMensaje] = useState('');
+  const API_BASE = process.env.REACT_APP_API_BASE_URL;
 
   const handleRegister = async () => {
+    const url = `${API_BASE}/api/users/register`;
+    console.log('👉 Registrando en:', url);
+
     try {
-      const res = await fetch('http://localhost:3001/api/users/register', {
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
-      });
+      })
 
       const data = await res.json();
       if (res.ok) {

@@ -1,0 +1,105 @@
+.instrument-guides-container {
+  padding: 40px;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.instrument-guides-title {
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--title-color);
+  text-align: center;
+}
+
+.instrument-guides-description {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  text-align: center;
+  max-width: 800px;
+  color: var(--subtitle-color);
+}
+
+.instrument-guides-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 40px;
+}
+
+.instrument-guide-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  border: 1px solid var(--card-border);
+}
+
+.instrument-guide-card:hover {
+  transform: translateY(-5px);
+  background-color: var(--card-hover-bg);
+}
+
+.instrument-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--highlight-color);
+}
+
+.instrument-description-box {
+  background-color: var(--card-bg-alt);
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 700px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  animation: fadeIn 0.4s ease;
+  border: 1px solid var(--card-border);
+}
+
+.instrument-description-box h2 {
+  font-size: 1.6rem;
+  color: var(--highlight-color);
+  margin-bottom: 12px;
+}
+
+.instrument-description-box p {
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.back-button {
+  margin-top: 30px;
+  background-color: var(--button-bg);
+  color: white;
+  border: none;
+  padding: 12px 26px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: var(--button-hover);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

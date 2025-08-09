@@ -1,17 +1,25 @@
 // frontend-auth/src/App.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Home";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from './pages/EditProfilePage';
 import SettingsPage from "./pages/SettingsPage";
-import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import NotesPage from "./pages/NotesPage";
+import FunctionalitiesPage from './pages/FunctionalitiesPage';
+import TheoriesPage from './pages/TheoriesPage';
+import ScalesPage from './pages/ScalesPage';
+import InstrumentGuidePage from './pages/InstrumentGuidePage';
+import ChordsPage from './pages/ChordsPage';
+import DailyLessonsPage from './pages/DailyLessonsPage';
+import MusicQuizPage from './pages/MusicQuizPage';
+import './index.css';
+
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
 
 
-// Componente de login/registro
 function AuthApp() {
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
@@ -23,9 +31,8 @@ function AuthApp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const endpoint = isLogin
-      ? "http://localhost:3001/api/users/login"
-      : "http://localhost:3001/api/users/register";
-
+      ? `${API_BASE}/api/users/login`
+      : `${API_BASE}/api/users/register`;
     try {
       const response = await fetch(endpoint, {
         method: "POST",
@@ -127,7 +134,7 @@ export default function App() {
         const decoded = jwtDecode(token);
         const userId = decoded.id || decoded.userId;
 
-        fetch(`http://localhost:3007/api/settings/${userId}`)
+        fetch(`${API_BASE}/api/settings/${decoded.userId}`)
           .then((res) => res.json())
           .then((data) => {
             // Aplicar o quitar clase dark-theme
@@ -148,6 +155,13 @@ export default function App() {
         <Route path="/edit-profile" element={<EditProfilePage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/notes" element={<NotesPage />} />
+        <Route path="/functionalities" element={<FunctionalitiesPage />} />
+        <Route path="/theories" element={<TheoriesPage />} />
+        <Route path="/scales" element={<ScalesPage />} />
+        <Route path="/instrument-guides" element={<InstrumentGuidePage />} />
+        <Route path="/chords" element={<ChordsPage />} />
+        <Route path="/daily-lessons" element={<DailyLessonsPage />} />
+        <Route path="/music-quizzes" element={<MusicQuizPage />} />
       </Routes>
     </Router>
   );

@@ -1,34 +1,49 @@
+// src/app.js
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const profileRoutes = require('./routes/profileRoutes');
+const swaggerDef = require('./swaggerDef');
 
 const app = express();
 
-console.log('🟡 Cargando middleware CORS...');
+// CORS middleware
+console.log('🟡 loading CORS middleware...');
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: ['http://98.80.152.185'],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization']
 }));
 
-console.log('🟡 Cargando middleware JSON...');
+// JSON parser
+console.log('🟡 loading JSON middleware...');
 app.use(express.json());
 
-console.log('🟢 Montando rutas de perfil en /api/profile...');
-const profileRoutes = require('./routes/profileRoutes');
+// Swagger setup
+console.log('🟢 setting up Swagger UI at /api/docs');
+const options = {
+  swaggerDefinition: swaggerDef,
+  apis: ['./routes/*.js', './models/*.js']
+};
+const swaggerSpec = swaggerJsdoc(options);
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Mount profile routes
+console.log('🟢 mounting profile routes on /api/profile...');
 app.use('/api/profile', profileRoutes);
 
-console.log('⏳ Conectando a MongoDB...');
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000
-})
-.then(() => console.log('✅ MongoDB conectado (profile-service)'))
-.catch(err => console.error('❌ Error de conexión a MongoDB:', err.message));
+// MongoDB connection
+console.log('⏳ connecting to MongoDB...');
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ MongoDB connected (profile-service)'))
+  .catch(err => console.error('❌ MongoDB connection error:', err.message));
 
+// Health check
 app.get('/', (req, res) => {
   res.send('Profile service is running!');
 });

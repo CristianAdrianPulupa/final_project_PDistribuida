@@ -1,0 +1,119 @@
+/* Fondo global */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Variables globales */
+:root {
+  --text-color: #333;
+  --background-color: #fff;
+  --card-bg: #f9f9f9;
+  --highlight: #4f46e5;
+}
+
+:root.dark {
+  --text-color: #f3f3f3;
+  --background-color: #121212;
+  --card-bg: #1f1f1f;
+}
+
+/* Contenedor principal */
+.scales-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Título */
+.scales-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--heading-color);
+  transition: color 0.3s ease;
+}
+
+/* Forzamos el color blanco en modo oscuro si falla la variable */
+body.dark .scales-title {
+  color: var(--heading-color, #ffffff);
+}
+
+
+/* Descripción con fondo */
+.scales-description {
+  background-color: var(--card-bg);
+  border-left: 5px solid #4f46e5;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  color: var(--text-color);
+}
+
+/* Lista de escalas */
+.scales-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Tarjeta individual */
+.scale-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  color: var(--text-color);
+}
+
+/* Nombre de la escala */
+.scale-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4f46e5;
+  margin-bottom: 0.5rem;
+}
+
+/* Texto dentro de la tarjeta */
+.scale-card p {
+  margin: 0.4rem 0;
+  color: var(--text-color);
+}
+
+/* Imagen */
+.scale-image {
+  display: block;
+  margin: 1rem auto 0;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Botón de regreso */
+.back-button-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.back-button {
+  text-decoration: none;
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+}
+
+.back-button:hover {
+  background-color: #3730a3;
+}

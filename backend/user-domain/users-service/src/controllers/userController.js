@@ -26,7 +26,7 @@ const register = async (req, res) => {
 
     // Create profile
     try {
-      await axios.post('http://profile-service:3006/api/profile', {
+      await axios.post('http://98.80.152.185/api/profile', {
         userId: user._id.toString(),
         name,
         email,
@@ -67,7 +67,7 @@ const login = async (req, res) => {
 
     // ✅ UPDATE STATUS TO "active" IN user-status-service
     try {
-      await axios.post('http://user-status-service:3008/api/status', {
+      await axios.post('http://98.80.152.185/api/status', {
         userId: user._id.toString(),
         status: "active"
       });

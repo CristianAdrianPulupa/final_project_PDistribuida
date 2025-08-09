@@ -5,6 +5,7 @@ import { FaUser, FaEnvelope, FaEdit } from 'react-icons/fa';
 import './ProfilePage.css';
 import { motion } from 'framer-motion';
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [status, setStatus] = useState("cargando...");
@@ -22,27 +23,34 @@ const ProfilePage = () => {
   }
 
   useEffect(() => {
-    if (!userId) return;
+  if (!userId) return;
 
-    // Obtener perfil
-    fetch(`http://localhost:3006/api/profile/${userId}`)
-      .then(res => res.json())
-      .then(data => {
-        setProfile(data);
-      })
-      .catch(err => console.error('Error al obtener perfil:', err));
+  const headers = { Authorization: `Bearer ${token}` };
 
-    // Obtener estado
-    fetch(`http://localhost:3008/api/status/${userId}`)
-      .then(res => res.json())
-      .then(data => {
-        setStatus(data.status || "desconocido");
-      })
-      .catch(err => {
-        console.error('Error al obtener estado:', err);
-        setStatus("desconocido");
-      });
-  }, [userId]);
+  // Obtener perfil
+  fetch(`${API_BASE}/api/profile/${userId}`, { headers })
+    .then(res => {
+      if (!res.ok) throw new Error('Error al obtener perfil');
+      return res.json();
+    })
+    .then(data => setProfile(data))
+    .catch(err => {
+      console.error(err);
+      setProfile(null);
+    });
+
+  // Obtener estado
+  fetch(`${API_BASE}/api/status/${userId}`, { headers })
+    .then(res => {
+      if (!res.ok) throw new Error('Error al obtener estado');
+      return res.json();
+    })
+    .then(data => setStatus(data.status || "conectado"))
+    .catch(err => {
+      console.error(err);
+      setStatus("conectado");
+    });
+}, [userId, token]);
 
   if (!profile) return <p className="text-center mt-10 text-gray-500">Cargando perfil...</p>;
 

@@ -1,0 +1,84 @@
+.chords-container {
+  padding: 40px;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.chords-title {
+  font-size: 2.6rem;
+  font-weight: bold;
+  color: var(--title-color);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chords-description {
+  font-size: 1.1rem;
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 30px;
+  color: var(--subtitle-color);
+}
+
+.chords-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.chord-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+  text-align: center;
+}
+
+.chord-card:hover {
+  transform: translateY(-6px);
+  background-color: var(--card-hover-bg);
+}
+
+.chord-card h2 {
+  color: var(--highlight-color);
+  margin-bottom: 8px;
+}
+
+.chords-image-wrapper {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.chords-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  border: 2px solid var(--card-border);
+}
+
+.back-button {
+  padding: 10px 20px;
+  background-color: #0d6efd;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.back-button:hover {
+  background-color: #0b5ed7;
+}

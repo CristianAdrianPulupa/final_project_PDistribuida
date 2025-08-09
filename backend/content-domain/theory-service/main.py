@@ -11,7 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.getenv('DB_USER')}:{o
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
-app.register_blueprint(theory_bp)
+app.register_blueprint(theory_bp, url_prefix="/api/theory")
 
 @app.route('/')
 def index():

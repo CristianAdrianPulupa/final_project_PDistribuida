@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
+const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
 const EditProfilePage = () => {
   const [profile, setProfile] = useState({ name: "", email: "", bio: "" });
   const [userId, setUserId] = useState("");
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -15,7 +18,7 @@ const EditProfilePage = () => {
         const uid = decoded.id || decoded.userId;
         setUserId(uid);
 
-        fetch(`http://localhost:3006/api/profile/${uid}`)
+        fetch(`${API_BASE}/api/profile/${uid}`)
           .then(res => res.json())
           .then(data => setProfile(data))
           .catch(err => console.error("Error al obtener perfil:", err));
@@ -31,7 +34,7 @@ const EditProfilePage = () => {
   };
 
   const handleSave = () => {
-    fetch(`http://localhost:3006/api/profile/${userId}`, {
+    fetch(`${API_BASE}/api/profile/${userId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(profile),

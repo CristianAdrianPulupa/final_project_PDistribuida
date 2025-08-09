@@ -1,3 +1,4 @@
+
 /* frontend-auth/src/index.css */
 body, html {
   margin: 0;
@@ -161,3 +162,44 @@ body {
   --input-disabled: #eeeeee;
 }
 
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --title-color: #1976d2;
+  --subtitle-color: #37474f;
+  --highlight-color: #1565c0;
+
+  --card-bg: #f5f5f5;
+  --card-bg-alt: #eeeeee;
+  --card-border: #cccccc;
+  --card-hover-bg: #e0e0e0;
+
+  --button-bg: #1976d2;
+  --button-hover: #0d47a1;
+}
+
+body.dark-theme {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --title-color: #90caf9;
+  --subtitle-color: #cfd8dc;
+  --highlight-color: #4fc3f7;
+
+  --card-bg: #1e1e1e;
+  --card-bg-alt: #212121;
+  --card-border: #424242;
+  --card-hover-bg: #2c2c2c;
+
+  --button-bg: #3949ab;
+  --button-hover: #303f9f;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
